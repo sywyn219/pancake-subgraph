@@ -217,7 +217,7 @@ export function handleSync(event: Sync): void {
   //   .plus(pair.reserve1.times(token1.derivedBNB as BigDecimal));
   // pair.reserveUSD = pair.reserveBNB.times(bundle.bnbPrice);
   pair.reserveBNB = pair.reserve0;
-  pair.reserveUSD = pair.reserve1;
+  pair.reserveUSD = pair.reserve1.plus(pair.reserve1);
 
   // use tracked amounts globally
   pancake.totalLiquidityBNB = pancake.totalLiquidityBNB.plus(trackedLiquidityBNB);
