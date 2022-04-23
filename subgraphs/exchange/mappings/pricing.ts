@@ -4,30 +4,35 @@ import { Pair, Token, Bundle } from "../generated/schema";
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 
 let WBNB_ADDRESS = "0x2a117B6DD140E5C43dAFEB2283Da98b02deF1711";
-let BUSD_WBNB_PAIR = "0x58f876857a02d6762e0101bb5c46a8c1ed44dc16"; // created block 589414
+// let BUSD_WBNB_PAIR = "0x58f876857a02d6762e0101bb5c46a8c1ed44dc16"; // created block 589414
 let USDT_WBNB_PAIR = "0x59b4EAadc24dC061C738132E4321bedB2187e2A6"; // created block 648115
 
 export function getBnbPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
   let usdtPair = Pair.load(USDT_WBNB_PAIR); // usdt is token0
-  let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
-
-  if (busdPair !== null && usdtPair !== null) {
-    let totalLiquidityBNB = busdPair.reserve0.plus(usdtPair.reserve1);
-    if (totalLiquidityBNB.notEqual(ZERO_BD)) {
-      let busdWeight = busdPair.reserve0.div(totalLiquidityBNB);
-      let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB);
-      return busdPair.token1Price.times(busdWeight).plus(usdtPair.token0Price.times(usdtWeight));
-    } else {
-      return ZERO_BD;
-    }
-  } else if (busdPair !== null) {
-    return busdPair.token1Price;
-  } else if (usdtPair !== null) {
+  // let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
+  if (usdtPair !== null) {
     return usdtPair.token0Price;
-  } else {
+  }else {
     return ZERO_BD;
   }
+
+  // if (usdtPair !== null) {
+  //   let totalLiquidityBNB = busdPair.reserve0.plus(usdtPair.reserve1);
+  //   if (totalLiquidityBNB.notEqual(ZERO_BD)) {
+  //     let busdWeight = busdPair.reserve0.div(totalLiquidityBNB);
+  //     let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB);
+  //     return busdPair.token1Price.times(busdWeight).plus(usdtPair.token0Price.times(usdtWeight));
+  //   } else {
+  //     return ZERO_BD;
+  //   }
+  // } else if (busdPair !== null) {
+  //   return busdPair.token1Price;
+  // } else if (usdtPair !== null) {
+  //   return usdtPair.token0Price;
+  // } else {
+  //   return ZERO_BD;
+  // }
 }
 
 // token where amounts should contribute to tracked volume and liquidity
